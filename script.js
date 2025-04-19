@@ -1,3 +1,6 @@
+const url = "https://binaural-api.onrender.com/generate";
+let data = undefined;
+
 const base = document.querySelector('#frequency');
 const baseInput = document.querySelector('#base-selector');
 base.textContent = baseInput.value+' hz';
@@ -40,3 +43,61 @@ selector.addEventListener(('change'),()=>{
         card.style.height = "200px";
     }
 });
+
+if(selector.value==='Custom'){
+    data = {
+         base:base.value,
+         diff:diff.value,
+         duration:time.value
+    }
+}else if(selector.value==='Alpha'){
+    data = {
+        base:200,
+        diff:10,
+        duration:60
+   }
+}else if(selector.value=='Beta'){
+    data = {
+        base:420,
+        diff:20,
+        duration:60
+   }
+}else if(selector.value=='Gamma'){
+    data = {
+        base:440,
+        diff:40,
+        duration:60
+   }
+}else if(selector.value=='Theta'){
+    data = {
+        base:200,
+        diff:6,
+        duration:60
+   }
+}
+function fetchAndPlay(){
+    fetch(url,{
+        method:'Post',
+        headers:{
+            'Content-Type':'application/json'
+        },
+        body:JSON.stringify(data),
+    })
+    .then(function(response){
+        if(!response.ok){
+            throw new Error("failed to fetch audio");
+        }
+        return response.blob();
+    })
+    .then(function(blob){
+        const audioUrl = URL.createObjectURL(blob);
+        const audio = new Audio(audioUrl);
+        audio.play();
+    })
+    .catch(function(error){
+        console.log('Error: ',error);
+        
+    });
+    
+}
+
