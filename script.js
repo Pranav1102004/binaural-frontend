@@ -87,6 +87,11 @@ playbtn.addEventListener('click',()=>{
 })
 
 function fetchAndPlay(){
+    const loader = document.getElementById('loader');
+    const playbtn = document.getElementById('play-btn');
+
+    loader.style.display = 'block';     // Show loader
+    playbtn.disabled = true; 
     fetch(url,{
         method:'Post',
         headers:{
@@ -101,11 +106,15 @@ function fetchAndPlay(){
         return response.blob();
     })
     .then(function(blob){
+        loader.style.display = 'none';  
+        playbtn.disabled = false;
         const audioUrl = URL.createObjectURL(blob);
         const audio = new Audio(audioUrl);
         audio.play();
     })
     .catch(function(error){
+        loader.style.display = 'none';  
+        playbtn.disabled = false;
         console.log('Error: ',error);
         
     });
