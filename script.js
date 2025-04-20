@@ -1,5 +1,9 @@
 const url = "https://binaural-api.onrender.com/generate";
-let data = undefined;
+let data =  {
+    base:200,
+    diff:10,
+    duration:60
+};
 
 const base = document.querySelector('#frequency');
 const baseInput = document.querySelector('#base-selector');
@@ -42,39 +46,46 @@ selector.addEventListener(('change'),()=>{
         custom.style.display = "none";
         card.style.height = "200px";
     }
+    
 });
 
-if(selector.value==='Custom'){
-    data = {
-         base:base.value,
-         diff:diff.value,
-         duration:time.value
+const playbtn = document.getElementById('play-btn');
+
+playbtn.addEventListener('click',()=>{
+    if(selector.value==='Custom'){
+        data = {
+             base:Number(baseInput.value),
+             diff:Number(diffInput.value),
+             duration:Number(timeInput.value)
+        }
+    }else if(selector.value==='Alpha'){
+        data = {
+            base:200,
+            diff:10,
+            duration:60
+       }
+    }else if(selector.value==='Beta'){
+        data = {
+            base:420,
+            diff:20,
+            duration:60
+       }
+    }else if(selector.value==='Gamma'){
+        data = {
+            base:440,
+            diff:40,
+            duration:60
+       }
+    }else if(selector.value==='Theta'){
+        data = {
+            base:200,
+            diff:6,
+            duration:60
+       }
     }
-}else if(selector.value==='Alpha'){
-    data = {
-        base:200,
-        diff:10,
-        duration:60
-   }
-}else if(selector.value=='Beta'){
-    data = {
-        base:420,
-        diff:20,
-        duration:60
-   }
-}else if(selector.value=='Gamma'){
-    data = {
-        base:440,
-        diff:40,
-        duration:60
-   }
-}else if(selector.value=='Theta'){
-    data = {
-        base:200,
-        diff:6,
-        duration:60
-   }
-}
+    console.log(data);
+})
+
 function fetchAndPlay(){
     fetch(url,{
         method:'Post',
